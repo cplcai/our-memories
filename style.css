@@ -148,7 +148,7 @@ dialog p { text-align: center; margin: 15px 0 0; }
 .album-view #large-photo { max-height: 55dvh; }
 .original-photo { display: block; width: max-content; margin: 0 auto 16px; color: var(--rose); font-size: 13px; text-decoration: underline; text-underline-offset: 4px; }
 .original-photo[hidden] { display: none; }
-.full-resolution-view #large-photo { width: 100%; max-height: none; height: auto; }
+.full-resolution-view #large-photo { width: auto; max-height: none; height: auto; }
 .full-resolution-view .close-dialog { position: sticky; top: 0; z-index: 5; display: block; margin: -25px -10px 5px auto; border-radius: 50%; background: #fffefbf0; }
 .album-thumbnails { display: flex; gap: 9px; max-width: 100%; margin: 20px auto 0; padding: 3px; overflow-x: auto; overscroll-behavior-x: contain; }
 .album-thumbnails[hidden] { display: none; }

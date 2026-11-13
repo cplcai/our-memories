@@ -34,6 +34,8 @@
 
 「表白啦」聊天记录使用原始 JPEG 文件，清单中标记 `fullResolution: true`，可在弹窗中向下滚动阅读，也可通过「打开原图」单独放大查看。
 
+「从相识到相恋」相册中的聊天记录也以原图发布，按文件顺序浏览。
+
 ## 部署
 
 仓库 Settings → Pages → Deploy from a branch → main → / (root) → Save。

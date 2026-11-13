@@ -88,7 +88,7 @@ function showPhoto(index) {
   for (const [thumbnailIndex, button] of Array.from(albumThumbnails.children).entries()) {
     button.setAttribute("aria-current", String(thumbnailIndex === activePhotoIndex));
   }
-  if (activeAlbum && dialog.open) {
+  if (activeAlbum && dialog.open && !photo.fullResolution) {
     albumThumbnails.children[activePhotoIndex].scrollIntoView({ block: "nearest", inline: "nearest" });
   }
 }

@@ -900,5 +900,165 @@ window.PHOTO_LIBRARY = [
     "caption": "mmexport1785303120587",
     "album": "要一起吃一百顿饭",
     "source": "要一起吃一百顿饭/mmexport1785303120587.jpg"
+  },
+  {
+    "src": "./images/chat-story/49c5567930348caa.jpg",
+    "thumbnail": "./images/chat-story/49c5567930348caa.jpg",
+    "width": 718,
+    "height": 1266,
+    "caption": "mmexport1793029245139",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029245139.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/ba199cae40fbd7fa.jpg",
+    "thumbnail": "./images/chat-story/ba199cae40fbd7fa.jpg",
+    "width": 720,
+    "height": 666,
+    "caption": "mmexport1793029248027",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029248027.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/12c124916b6d1ba5.jpg",
+    "thumbnail": "./images/chat-story/12c124916b6d1ba5.jpg",
+    "width": 716,
+    "height": 502,
+    "caption": "mmexport1793029250161",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029250161.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/ed12e47089b551dd.jpg",
+    "thumbnail": "./images/chat-story/ed12e47089b551dd.jpg",
+    "width": 714,
+    "height": 702,
+    "caption": "mmexport1793029252580",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029252580.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/48db3715e8bc46c5.jpg",
+    "thumbnail": "./images/chat-story/48db3715e8bc46c5.jpg",
+    "width": 722,
+    "height": 532,
+    "caption": "mmexport1793029254650",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029254650.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/11d6157c2c87e44f.jpg",
+    "thumbnail": "./images/chat-story/11d6157c2c87e44f.jpg",
+    "width": 708,
+    "height": 738,
+    "caption": "mmexport1793029256610",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029256610.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/d6d13f5258997285.jpg",
+    "thumbnail": "./images/chat-story/d6d13f5258997285.jpg",
+    "width": 538,
+    "height": 1132,
+    "caption": "mmexport1793029258949",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029258949.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/0e134f255e624893.jpg",
+    "thumbnail": "./images/chat-story/0e134f255e624893.jpg",
+    "width": 546,
+    "height": 1068,
+    "caption": "mmexport1793029260902",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029260902.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/873cb848e4edd6d4.jpg",
+    "thumbnail": "./images/chat-story/873cb848e4edd6d4.jpg",
+    "width": 540,
+    "height": 174,
+    "caption": "mmexport1793029263112",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029263112.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/cae5d8b84a51961d.jpg",
+    "thumbnail": "./images/chat-story/cae5d8b84a51961d.jpg",
+    "width": 536,
+    "height": 1138,
+    "caption": "mmexport1793029265231",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029265231.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/d9d1c6a0b31751da.jpg",
+    "thumbnail": "./images/chat-story/d9d1c6a0b31751da.jpg",
+    "width": 546,
+    "height": 932,
+    "caption": "mmexport1793029267675",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029267675.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/04724bf839177126.jpg",
+    "thumbnail": "./images/chat-story/04724bf839177126.jpg",
+    "width": 546,
+    "height": 1190,
+    "caption": "mmexport1793029269888",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029269888.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/3d23dada42cc665f.jpg",
+    "thumbnail": "./images/chat-story/3d23dada42cc665f.jpg",
+    "width": 544,
+    "height": 538,
+    "caption": "mmexport1793029271885",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029271885.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/4b849627836423c7.jpg",
+    "thumbnail": "./images/chat-story/4b849627836423c7.jpg",
+    "width": 540,
+    "height": 1022,
+    "caption": "mmexport1793029273699",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029273699.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/f0c2cb717f7f6929.jpg",
+    "thumbnail": "./images/chat-story/f0c2cb717f7f6929.jpg",
+    "width": 542,
+    "height": 300,
+    "caption": "mmexport1793029276393",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029276393.jpg",
+    "fullResolution": true
+  },
+  {
+    "src": "./images/chat-story/8b97d104de5888cf.jpg",
+    "thumbnail": "./images/chat-story/8b97d104de5888cf.jpg",
+    "width": 544,
+    "height": 476,
+    "caption": "mmexport1793029278581",
+    "album": "从相识到相恋",
+    "source": "从相识到相恋/mmexport1793029278581.jpg",
+    "fullResolution": true
   }
 ];
