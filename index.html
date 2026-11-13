@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f2ec">
+  <meta name="description" content="蔡旆伦与柏君祥的回忆小站，收藏一起走过的日子。">
+  <title>和柏的回忆</title>
+  <link rel="stylesheet" href="./style.css">
+  <script src="./config.js" defer></script>
+  <script src="./app.js" defer></script>
+</head>
+<body>
+  <a class="skip" href="#main">跳到正文</a>
+  <header class="header">
+    <a class="brand" href="#home"><span class="brand-heart" aria-hidden="true">♡</span><span data-site-title>和柏的回忆</span></a>
+    <nav aria-label="主导航">
+      <a href="#story">我们的故事</a><a href="#album">恋爱相册</a><a href="#wishes">共同心愿</a>
+    </nav>
+  </header>
+  <main id="main">
+    <section class="hero" id="home" aria-labelledby="hero-title">
+      <div class="hero-copy">
+        <p class="eyebrow">致我们，一起走过的日子</p>
+        <h1 id="hero-title">把平凡的日子，<br>写成<span>我们的故事。</span></h1>
+        <p class="intro" id="intro">想把每一次心动、每一场日落，<br>和每一个有你的明天，都好好收藏。</p>
+        <div class="couple"><span id="person-one">蔡旆伦</span><span class="couple-heart" aria-label="爱">♡</span><span id="person-two">柏君祥</span></div>
+        <a class="primary-link" href="#story">翻开我们的回忆 <span aria-hidden="true">↗</span></a>
+      </div>
+      <figure class="hero-photo">
+        <img src="./images/scenery.jpg" alt="原野与天空的温柔光影" width="1200" height="800" fetchpriority="high">
+        <figcaption><span>想和你，看很多很多次日落。</span><small>氛围配图 · 等一张我们的合照</small></figcaption>
+        <span class="photo-mark" aria-hidden="true">with you ♡</span>
+      </figure>
+    </section>
+    <section class="together" aria-label="恋爱计时">
+      <div class="together-label"><span aria-hidden="true">♡</span><p>故事开始于<time id="start-date" datetime="2026-05-11">2026.05.11</time></p></div>
+      <div class="counter"><p>我们已经一起走过</p><div><strong id="days">—</strong><span>天</span></div></div>
+      <p class="together-note">从这一天起，<br>每一天都有了特别的意义。</p>
+    </section>
+    <section class="section story" id="story" aria-labelledby="story-title">
+      <div class="section-head"><div><p class="eyebrow">把重要的小事记下来</p><h2 id="story-title">我们的故事<span class="heading-dot">.</span></h2></div><p>有些瞬间，值得一遍又一遍重温。</p></div>
+      <div class="timeline" id="timeline"></div>
+    </section>
+    <section class="section album" id="album" aria-labelledby="album-title">
+      <div class="section-head"><div><p class="eyebrow">镜头里的我们</p><h2 id="album-title">恋爱相册<span class="heading-dot">.</span></h2></div><p>把喜欢的瞬间，留在这里。</p></div>
+      <div class="photo-grid" id="photos"></div>
+      <p class="section-note" id="album-note">相册还在等我们的第一张照片。</p>
+    </section>
+    <section class="section wishes" id="wishes" aria-labelledby="wishes-title">
+      <div class="wish-intro"><p class="eyebrow">关于我们的以后</p><h2 id="wishes-title">想和你一起，<br>慢慢完成。</h2><p>把“有机会”，变成“我们去过”。</p><span class="hand-heart" aria-hidden="true">♡</span></div>
+      <div class="wish-list" id="wish-list"></div>
+    </section>
+    <section class="closing"><p>日子很长，故事慢慢写。</p><span id="signature">蔡旆伦 & 柏君祥</span><a href="#home" aria-label="回到顶部">↑</a></section>
+  </main>
+  <footer><span data-site-title>和柏的回忆</span><span>始于 <time datetime="2026-05-11" id="footer-date">2026.05.11</time> · 持续更新的我们 ♡</span></footer>
+  <dialog id="photo-dialog" aria-label="照片大图"><button class="close-dialog" type="button" aria-label="关闭照片">×</button><img id="large-photo" alt=""><p id="photo-caption"></p></dialog>
+  <noscript><p class="noscript">请启用 JavaScript，以显示恋爱计时和回忆内容。</p></noscript>
+</body>
+</html>
