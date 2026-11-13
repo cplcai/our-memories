@@ -21,6 +21,7 @@ if errorlevel 1 (
   exit /b 1
 )
 :launch
+echo 正在打开回忆管理台：http://127.0.0.1:5207/
 node manager/server.cjs --open
 if errorlevel 1 pause
 endlocal
