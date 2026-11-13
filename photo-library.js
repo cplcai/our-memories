@@ -69,7 +69,10 @@ window.PHOTO_LIBRARY = [
     "caption": "给柏拍的第一张照片",
     "album": "点滴回忆",
     "source": "给柏拍的第一张照片.jpg",
-    "id": "9fd6aa50d5312e971041a79e"
+    "id": "9fd6aa50d5312e971041a79e",
+    "date": "2026-05-02",
+    "originalSource": "给柏拍的第一张照片.jpg",
+    "fullResolution": false
   },
   {
     "src": "./images/albums/82c4d02bc587df69.webp",
@@ -89,7 +92,10 @@ window.PHOTO_LIBRARY = [
     "caption": "好好看的一张合照 在星海广场",
     "album": "点滴回忆",
     "source": "好好看的一张合照 在星海广场.jpg",
-    "id": "456a02623189c9d740e3de75"
+    "id": "456a02623189c9d740e3de75",
+    "date": "2026-10-02",
+    "originalSource": "好好看的一张合照 在星海广场.jpg",
+    "fullResolution": false
   },
   {
     "src": "./images/albums/b6d85a997ddc06d7.webp",
