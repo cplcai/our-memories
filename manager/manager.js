@@ -200,7 +200,7 @@ function addFiles(files) {
   for (const file of files) {
     if (!file.type.startsWith("image/") && !/\.(jpe?g|png|webp|gif|avif|heic|tiff?)$/i.test(file.name)) continue;
     const relative = file.webkitRelativePath || file.name;
-    if (!queue.some(item => item.relative === relative && item.file.size === file.size && item.file.lastModified === file.lastModified)) queue.push({ file, relative });
+    if (!queue.some(item => item.relative === relative && item.file.size === file.size && item.file.lastModified === file.lastModified)) queue.push({ file, relative, id: crypto.randomUUID() });
   }
   renderQueue();
 }
@@ -225,7 +225,7 @@ async function uploadFiles(event) {
       const directory = folders && item.relative.includes("/") ? item.relative.split("/").slice(0, -1).join(" / ") : "";
       const album = [baseAlbum, directory].filter(Boolean).join(" / ");
       const data = new FormData();
-      data.set("options", JSON.stringify({ album, caption: item.file.name.replace(/\.[^.]+$/, ""), mode }));
+      data.set("options", JSON.stringify({ album, caption: item.file.name.replace(/\.[^.]+$/, ""), mode, uploadId: item.id }));
       data.set("file", item.file);
       document.getElementById("upload-status").textContent = `正在保存 ${count + 1} / ${total} · ${item.file.name}`;
       acceptState(await api("/api/photos", { method: "POST", body: data }));

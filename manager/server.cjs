@@ -126,10 +126,11 @@ async function saveFiles(changes) {
   }
 }
 
-async function mutate(request, action) {
+async function mutate(request, action, duplicatePhotoId) {
   const task = mutationQueue.then(async () => {
     if (publishing.status === "publishing") fail("正在发布，请等发布结束后保存", 409);
     const data = await readData();
+    if (duplicatePhotoId && data.photos.some(photo => photo.id === duplicatePhotoId)) return;
     const expectedRevision = request.headers["if-match"]?.replace(/^"|"$/g, "");
     if (expectedRevision !== data.revision) fail("页面数据已更新，请点击刷新后再保存", 409);
     await action(data);
@@ -240,6 +241,8 @@ async function upload(request) {
       request.pipe(parser);
     });
     if (!filename || !fileTask) fail("请选择要上传的照片");
+    const uploadId = options.uploadId || crypto.randomUUID();
+    if (!/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(uploadId)) fail("上传标识无效，请重新选择照片");
     await mutate(request, async data => {
       const album = text(options.album || "", "相册名称");
       const caption = text(options.caption || path.basename(filename, path.extname(filename)), "照片配文", true);
@@ -249,7 +252,7 @@ async function upload(request) {
       const height = rotate ? metadata.width : metadata.height;
       const original = options.mode === "original" || (options.mode !== "optimized" && (height > width * 3 || /聊天|相识到相恋/.test(album)));
       if (original && (await fsp.stat(temporary)).size > 100 * 1024 * 1024) fail("原图超过 GitHub 的 100 MB 单文件限制，请选择网页优化模式");
-      const id = crypto.randomUUID();
+      const id = uploadId;
       const extension = originalExtensions[metadata.format];
       if (original && !extension) fail("原图展示支持 JPG、PNG、WebP、GIF 和 AVIF，请为这张照片选择网页优化");
       const imageName = id + (original ? extension : ".webp");
@@ -276,7 +279,7 @@ async function upload(request) {
         for (const item of created) await fsp.rm(item, { force: true }).catch(() => {});
         throw error;
       }
-    });
+    }, uploadId);
   } finally {
     if (fileTask) await fileTask.catch(() => {});
     await fsp.rm(temporary, { force: true }).catch(() => {});
