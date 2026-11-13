@@ -505,10 +505,10 @@ async function handle(request, response) {
     return json(response, await publicState());
   }
   if (url.pathname === "/api/publish" && request.method === "POST") {
-    await mutationQueue;
-    if (publishing.status === "publishing") fail("发布正在进行", 409);
-    publishing = { status: "publishing", message: "正在准备发布" };
-    void publish();
+    await mutate(request, async () => {
+      publishing = { status: "publishing", message: "正在准备发布" };
+      void publish();
+    });
     return json(response, publishing, 202);
   }
   if (url.pathname === "/api/download-ticket" && request.method === "POST") {
