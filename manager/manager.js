@@ -46,7 +46,7 @@ async function api(endpoint, options = {}) {
   let body = options.body;
   if (options.method && options.method !== "GET") {
     headers["X-Manager-Token"] = state.csrf;
-    headers["If-Match"] = state.revision;
+    headers["If-Match"] = '"' + state.revision + '"';
   }
   if (body && !(body instanceof FormData)) {
     headers["Content-Type"] = "application/json";

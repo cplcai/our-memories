@@ -130,7 +130,8 @@ async function mutate(request, action) {
   const task = mutationQueue.then(async () => {
     if (publishing.status === "publishing") fail("正在发布，请等发布结束后保存", 409);
     const data = await readData();
-    if (request.headers["if-match"] !== data.revision) fail("页面数据已更新，请点击刷新后再保存", 409);
+    const expectedRevision = request.headers["if-match"]?.replace(/^"|"$/g, "");
+    if (expectedRevision !== data.revision) fail("页面数据已更新，请点击刷新后再保存", 409);
     await action(data);
   });
   mutationQueue = task.catch(() => {});
@@ -183,7 +184,7 @@ async function jsonBody(request) {
 }
 
 function json(response, value, status = 200) {
-  response.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" });
+  response.writeHead(status, { "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store", ...(value.revision ? { ETag: `"${value.revision}"` } : {}) });
   response.end(JSON.stringify(value));
 }
 
