@@ -15,8 +15,13 @@ const Busboy = require(path.join(runtime, "busboy"));
 const { Zip, ZipPassThrough } = require(path.join(runtime, "fflate"));
 const port = Number(process.env.MEMORIES_MANAGER_PORT || 5207);
 const address = `http://127.0.0.1:${port}`;
-const csrf = crypto.randomBytes(32).toString("hex");
 const work = path.join(root, ".tools", "manager");
+const csrfFile = path.join(work, "session-token");
+let csrf = crypto.randomBytes(32).toString("hex");
+try {
+  const savedToken = fs.readFileSync(csrfFile, "utf8").trim();
+  if (/^[a-f0-9]{64}$/.test(savedToken)) csrf = savedToken;
+} catch {}
 const gh = fs.existsSync(path.join(root, ".tools", "github-cli", "bin", "gh.exe"))
   ? path.join(root, ".tools", "github-cli", "bin", "gh.exe") : "gh";
 const environment = { ...process.env, GH_CONFIG_DIR: path.join(root, ".tools", "gh-config"), GIT_TERMINAL_PROMPT: "0" };
@@ -583,6 +588,7 @@ async function main() {
     if (process.argv.includes("--open") && process.platform === "win32") execFile("cmd.exe", ["/c", "start", "", address], { windowsHide: true });
     return;
   }
+  await fsp.writeFile(csrfFile, csrf, { mode: 0o600 });
   try {
     const saved = JSON.parse(await fsp.readFile(publishingFile, "utf8"));
     if (["complete", "failed", "publishing"].includes(saved.status)) publishing = saved;
