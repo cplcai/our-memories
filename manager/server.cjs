@@ -6,6 +6,7 @@ const crypto = require("node:crypto");
 const vm = require("node:vm");
 const { spawn, spawnSync, execFile } = require("node:child_process");
 const { pipeline } = require("node:stream/promises");
+const { assessPagesStatus } = require("./pages-status.cjs");
 
 const root = path.resolve(process.env.MEMORIES_PROJECT_ROOT || path.join(__dirname, ".."));
 const runtime = path.join(__dirname, "..", ".tools", "photo-processing", "node_modules");
@@ -24,6 +25,14 @@ const tickets = new Map();
 const originalExtensions = { jpeg: ".jpg", png: ".png", webp: ".webp", gif: ".gif", avif: ".avif" };
 let mutationQueue = Promise.resolve();
 let publishing = { status: "idle", message: "准备就绪" };
+const publishingFile = path.join(work, "publishing.json");
+
+function setPublishing(value) {
+  publishing = value;
+  const temporary = publishingFile + ".tmp";
+  fs.writeFileSync(temporary, JSON.stringify(value), "utf8");
+  fs.renameSync(temporary, publishingFile);
+}
 
 if (process.argv[2] === "--git-credential") {
   const result = spawnSync(gh, ["auth", "git-credential", ...process.argv.slice(3)], { env: environment, stdio: "inherit", windowsHide: true });
@@ -439,23 +448,41 @@ async function publish() {
     const remote = (await run("git", ["remote", "get-url", "origin"])).output;
     const repository = remote.match(/github\.com[/:]([^/]+\/[^/]+?)(?:\.git)?$/)?.[1];
     if (!repository) fail("无法识别当前 GitHub 仓库地址");
-    publishing.message = "GitHub Pages 正在构建网站";
-    const started = Date.now();
-    while (Date.now() - started < 600000) {
-      const result = await run(gh, ["api", `repos/${repository}/pages/builds/latest`]);
-      const build = JSON.parse(result.output);
-      if (build.commit === commit && build.status === "built") {
+    setPublishing({ status: "publishing", message: "正在确认本次发布状态", commit, repository });
+    await waitForPages(repository, commit);
+  } catch (error) {
+    setPublishing({ ...publishing, status: "failed", message: error.message });
+  }
+}
+
+async function waitForPages(repository, commit) {
+  const started = Date.now();
+  while (Date.now() - started < 600000) {
+    try {
+      const fresh = Date.now();
+      const result = await run(gh, ["api", "-H", "Cache-Control: no-cache", `repos/${repository}/actions/runs?head_sha=${commit}&per_page=20&_check=${fresh}`]);
+      const runs = JSON.parse(result.output).workflow_runs || [];
+      let assessment = assessPagesStatus(commit, runs);
+      if (!assessment.source) {
+        const legacy = await run(gh, ["api", "-H", "Cache-Control: no-cache", `repos/${repository}/pages/builds/latest?_check=${fresh}`], { allowFailure: true });
+        if (legacy.code === 0) assessment = assessPagesStatus(commit, runs, JSON.parse(legacy.output));
+      }
+      if (assessment.status === "complete") {
         const page = JSON.parse((await run(gh, ["api", `repos/${repository}/pages`])).output);
-        publishing = { status: "complete", message: "网站已发布", url: page.html_url, commit };
+        setPublishing({ status: "complete", message: "网站已发布", url: page.html_url, commit });
         return;
       }
-      if (build.commit === commit && build.status === "errored") fail(build.error?.message || "GitHub Pages 构建失败");
-      await new Promise(resolve => setTimeout(resolve, 5000));
+      if (assessment.status === "failed") {
+        setPublishing({ status: "failed", message: assessment.message, commit, repository });
+        return;
+      }
+      publishing.message = assessment.message;
+    } catch {
+      publishing.message = "网站代码已上传，正在重新查询发布结果";
     }
-    fail("上传已完成，GitHub Pages 构建仍在进行，可稍后再次检查发布");
-  } catch (error) {
-    publishing = { status: "failed", message: error.message };
+    await new Promise(resolve => setTimeout(resolve, 5000));
   }
+  setPublishing({ status: "failed", message: "代码已上传，发布状态确认超时，可点击发布重新检查", commit, repository });
 }
 
 const types = { ".html": "text/html; charset=utf-8", ".css": "text/css; charset=utf-8", ".js": "text/javascript; charset=utf-8", ".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png", ".webp": "image/webp", ".gif": "image/gif", ".avif": "image/avif" };
@@ -506,7 +533,7 @@ async function handle(request, response) {
   }
   if (url.pathname === "/api/publish" && request.method === "POST") {
     await mutate(request, async () => {
-      publishing = { status: "publishing", message: "正在准备发布" };
+      setPublishing({ status: "publishing", message: "正在准备发布" });
       void publish();
     });
     return json(response, publishing, 202);
@@ -555,6 +582,15 @@ async function main() {
     console.log(`回忆管理台 ${address}`);
     if (process.argv.includes("--open") && process.platform === "win32") execFile("cmd.exe", ["/c", "start", "", address], { windowsHide: true });
     return;
+  }
+  try {
+    const saved = JSON.parse(await fsp.readFile(publishingFile, "utf8"));
+    if (["complete", "failed", "publishing"].includes(saved.status)) publishing = saved;
+  } catch {}
+  if (publishing.status === "publishing") {
+    if (publishing.commit && publishing.repository) {
+      void waitForPages(publishing.repository, publishing.commit).catch(error => setPublishing({ ...publishing, status: "failed", message: error.message }));
+    } else setPublishing({ status: "failed", message: "上次发布已中断，可点击发布继续" });
   }
   const server = http.createServer((request, response) => {
     handle(request, response).catch(error => {
