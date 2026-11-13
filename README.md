@@ -30,8 +30,6 @@
 
 仓库 Settings → Pages → Deploy from a branch → main → / (root) → Save。
 
-这是独立编写的静态实现。内容在仓库中维护，没有在线编辑后台。当前风景图片是氛围配图，可以替换为自己的照片，替换时保留 `images/scenery.jpg` 文件名。
-
-氛围配图来源于 Unsplash。
+这是独立编写的静态实现。内容在仓库中维护，没有在线编辑后台。首页使用「初见」照片，文件为 `images/first-meeting.jpg`，可以通过替换该文件来更新首页照片。
 
 页面、照片和仓库内容均公开可见。
