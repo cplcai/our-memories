@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>和柏的回忆 · 管理台</title>
+  <link rel="stylesheet" href="/manager.css">
+  <script src="/manager.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/"><span>♡</span><strong>回忆管理台</strong></a>
+    <p class="site-name" id="site-name">和柏的回忆</p>
+    <nav aria-label="管理导航">
+      <button type="button" data-tab="photos" class="active">照片与相册</button>
+      <button type="button" data-tab="stories">重要的小事</button>
+      <button type="button" data-tab="wishes">共同心愿</button>
+      <button type="button" data-tab="settings">网站设置</button>
+    </nav>
+    <div class="sidebar-note"><span class="connection-dot"></span> 本机管理 · GitHub Pages</div>
+  </aside>
+  <div class="workspace">
+    <header class="topbar">
+      <span class="draft-status" id="draft-status" role="status">正在读取网站</span>
+      <div class="header-actions"><button id="refresh" type="button">刷新</button><a class="button" href="/preview/" target="_blank" rel="noopener">预览草稿 ↗</a><button class="primary" id="publish" type="button" disabled>发布到网站</button></div>
+    </header>
+    <div id="publish-progress" class="publish-progress" role="status" hidden></div>
+    <main id="main"><div class="loading">正在打开你们的回忆…</div></main>
+  </div>
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <dialog id="upload-dialog" aria-labelledby="upload-title">
+    <div class="dialog-heading"><h2 id="upload-title">收藏新的回忆</h2><button type="button" class="icon-button" data-close="upload-dialog" aria-label="关闭上传">×</button></div>
+    <form id="upload-form">
+      <div class="drop-zone" id="drop-zone"><span class="drop-icon">＋</span><strong>把照片拖到这里</strong><p>支持多张照片，也可以选择整个文件夹</p><div class="file-actions"><label class="button" for="upload-files">选择照片</label><label class="button" for="upload-folder">选择文件夹</label></div><input id="upload-files" type="file" accept="image/*" multiple hidden><input id="upload-folder" type="file" accept="image/*" multiple webkitdirectory hidden></div>
+      <div class="form-grid upload-options"><label>目标相册<input name="album" list="album-names" placeholder="留空为独立照片"></label><label>图片处理<select name="mode"><option value="auto">自动 · 长图和聊天相册保留原图</option><option value="original">全部保留原图</option><option value="optimized">网页优化</option></select></label></div>
+      <label class="check-label"><input type="checkbox" name="folders" checked> 按文件夹名称建立子相册</label>
+      <p class="hint">独立照片会使用文件名作为配文，保存后可以继续修改。</p>
+      <div id="upload-queue" class="upload-queue"></div>
+      <p id="upload-status" class="hint" role="status"></p>
+      <div class="dialog-actions"><button type="button" id="pause-upload" hidden>暂停上传</button><button type="submit" class="primary" id="start-upload">保存到本地草稿</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="photo-dialog" aria-labelledby="photo-editor-title">
+    <div class="dialog-heading"><h2 id="photo-editor-title">编辑照片</h2><button type="button" class="icon-button" data-close="photo-dialog" aria-label="关闭编辑">×</button></div>
+    <form id="photo-form"><input name="id" type="hidden"><div class="photo-editor"><img id="editor-preview" alt="照片预览"><div class="editor-fields"><label>配文<textarea name="caption" rows="3" required></textarea></label><label>所属相册<input name="album" list="album-names" placeholder="留空为独立照片"></label><label>日期<input name="date" type="date"></label><label class="check-label"><input name="fullResolution" type="checkbox"> 原图阅读，适合聊天长图</label><p class="hint">相册照片在网站上以相册名称和序号展示，独立照片展示配文。</p><a class="text-link" id="editor-download">下载照片</a></div></div><div class="dialog-actions"><button type="button" id="set-hero">设为首页照片</button><button type="submit" class="primary">保存修改</button></div></form>
+  </dialog>
+
+  <dialog id="move-dialog" aria-labelledby="move-title"><div class="dialog-heading"><h2 id="move-title">移动照片</h2><button type="button" class="icon-button" data-close="move-dialog" aria-label="关闭移动">×</button></div><form id="move-form"><label>目标相册<input name="album" list="album-names" placeholder="留空为独立照片"></label><div class="dialog-actions"><button type="submit" class="primary">保存移动</button></div></form></dialog>
+  <dialog id="rename-dialog" aria-labelledby="rename-title"><div class="dialog-heading"><h2 id="rename-title">重命名相册</h2><button type="button" class="icon-button" data-close="rename-dialog" aria-label="关闭重命名">×</button></div><form id="rename-form"><label>相册名称<input name="name" required></label><div class="dialog-actions"><button type="submit" class="primary">保存名称</button></div></form></dialog>
+  <datalist id="album-names"></datalist>
+</body>
+</html>
