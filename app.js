@@ -59,24 +59,83 @@ timeline.append(nextStory);
 
 const photos = document.getElementById("photos");
 const dialog = document.getElementById("photo-dialog");
-for (const photo of memories.photos) {
-  const button = element("button", "photo-card");
-  button.type = "button";
-  button.setAttribute("aria-label", `查看照片 ${photo.caption}`);
-  const image = element("img", "");
-  image.src = photo.src;
-  image.alt = photo.caption;
-  image.loading = "lazy";
-  const caption = element("span", "photo-card-caption", photo.caption);
-  button.append(image, caption);
-  button.addEventListener("click", () => {
-    document.getElementById("large-photo").src = photo.src;
-    document.getElementById("large-photo").alt = photo.caption;
-    document.getElementById("photo-caption").textContent = [photo.date && formattedDate(photo.date), photo.caption].filter(Boolean).join(" · ");
-    dialog.showModal();
-  });
-  photos.append(button);
+const albumFilter = document.getElementById("album-filter");
+const loadMore = document.getElementById("load-more");
+const batchSize = 24;
+let filteredPhotos = memories.photos;
+let visiblePhotoCount = 0;
+let activePhotoIndex = 0;
+
+function showPhoto(index) {
+  activePhotoIndex = (index + filteredPhotos.length) % filteredPhotos.length;
+  const photo = filteredPhotos[activePhotoIndex];
+  const largePhoto = document.getElementById("large-photo");
+  largePhoto.src = photo.src;
+  largePhoto.alt = photo.caption;
+  document.getElementById("photo-caption").textContent = [photo.album, photo.date && formattedDate(photo.date), photo.caption].filter(Boolean).join(" · ");
+  document.getElementById("photo-position").textContent = `${activePhotoIndex + 1} / ${filteredPhotos.length}`;
+  document.getElementById("previous-photo").disabled = filteredPhotos.length < 2;
+  document.getElementById("next-photo").disabled = filteredPhotos.length < 2;
 }
+
+function renderNextPhotos() {
+  const nextPhotoCount = Math.min(visiblePhotoCount + batchSize, filteredPhotos.length);
+  for (let index = visiblePhotoCount; index < nextPhotoCount; index += 1) {
+    const photo = filteredPhotos[index];
+    const button = element("button", "photo-card");
+    button.type = "button";
+    button.setAttribute("aria-label", `查看照片 ${photo.caption}`);
+    const image = element("img", "");
+    image.src = photo.thumbnail || photo.src;
+    image.alt = photo.caption;
+    image.loading = "lazy";
+    image.decoding = "async";
+    image.width = photo.width || 600;
+    image.height = photo.height || 600;
+    const caption = element("span", "photo-card-caption", photo.caption);
+    button.append(image, caption);
+    button.addEventListener("click", () => {
+      showPhoto(index);
+      dialog.showModal();
+    });
+    photos.append(button);
+  }
+  visiblePhotoCount = nextPhotoCount;
+  document.getElementById("photo-count").textContent = `已展示 ${visiblePhotoCount} / ${filteredPhotos.length} 张`;
+  loadMore.hidden = visiblePhotoCount >= filteredPhotos.length;
+}
+
+const albumCounts = new Map();
+for (const photo of memories.photos) {
+  const album = photo.album || "点滴回忆";
+  albumCounts.set(album, (albumCounts.get(album) || 0) + 1);
+}
+for (const [album, count] of albumCounts) {
+  const option = element("option", "", `${album}（${count} 张）`);
+  option.value = album;
+  albumFilter.append(option);
+}
+
+albumFilter.addEventListener("change", () => {
+  filteredPhotos = memories.photos.filter(photo => !albumFilter.value || (photo.album || "点滴回忆") === albumFilter.value);
+  photos.replaceChildren();
+  visiblePhotoCount = 0;
+  renderNextPhotos();
+});
+loadMore.addEventListener("click", renderNextPhotos);
+document.getElementById("previous-photo").addEventListener("click", () => showPhoto(activePhotoIndex - 1));
+document.getElementById("next-photo").addEventListener("click", () => showPhoto(activePhotoIndex + 1));
+dialog.addEventListener("keydown", event => {
+  if (event.key === "ArrowLeft") {
+    event.preventDefault();
+    showPhoto(activePhotoIndex - 1);
+  }
+  if (event.key === "ArrowRight") {
+    event.preventDefault();
+    showPhoto(activePhotoIndex + 1);
+  }
+});
+
 if (memories.photos.length === 0) {
   for (const [symbol, label] of [["♡", "我们的合照"], ["☀", "一起看过的风景"], ["✿", "值得记住的小事"]]) {
     const placeholder = element("div", "photo-placeholder");
@@ -86,7 +145,9 @@ if (memories.photos.length === 0) {
     photos.append(placeholder);
   }
 } else {
+  document.getElementById("album-toolbar").hidden = false;
   document.getElementById("album-note").hidden = true;
+  renderNextPhotos();
 }
 document.querySelector(".close-dialog").addEventListener("click", () => dialog.close());
 dialog.addEventListener("click", event => {

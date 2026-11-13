@@ -7,6 +7,7 @@
   <meta name="description" content="蔡旆伦与柏君祥的回忆小站，收藏一起走过的日子。">
   <title>和柏的回忆</title>
   <link rel="stylesheet" href="./style.css">
+  <script src="./photo-library.js" defer></script>
   <script src="./config.js" defer></script>
   <script src="./app.js" defer></script>
 </head>
@@ -44,7 +45,13 @@
     </section>
     <section class="section album" id="album" aria-labelledby="album-title">
       <div class="section-head"><div><p class="eyebrow">镜头里的我们</p><h2 id="album-title">恋爱相册<span class="heading-dot">.</span></h2></div><p>把喜欢的瞬间，留在这里。</p></div>
+      <div class="album-toolbar" id="album-toolbar" hidden>
+        <label for="album-filter">选择相册</label>
+        <select id="album-filter"><option value="">全部回忆</option></select>
+        <p id="photo-count" role="status" aria-live="polite"></p>
+      </div>
       <div class="photo-grid" id="photos"></div>
+      <button class="load-more" id="load-more" type="button" hidden>再看一些回忆</button>
       <p class="section-note" id="album-note">相册还在等我们的第一张照片。</p>
     </section>
     <section class="section wishes" id="wishes" aria-labelledby="wishes-title">
@@ -54,7 +61,16 @@
     <section class="closing"><p>日子很长，故事慢慢写。</p><span id="signature">蔡旆伦 & 柏君祥</span><a href="#home" aria-label="回到顶部">↑</a></section>
   </main>
   <footer><span data-site-title>和柏的回忆</span><span>始于 <time datetime="2026-05-11" id="footer-date">2026.05.11</time> · 持续更新的我们 ♡</span></footer>
-  <dialog id="photo-dialog" aria-label="照片大图"><button class="close-dialog" type="button" aria-label="关闭照片">×</button><img id="large-photo" alt=""><p id="photo-caption"></p></dialog>
+  <dialog id="photo-dialog" aria-label="照片大图">
+    <button class="close-dialog" type="button" aria-label="关闭照片">×</button>
+    <img id="large-photo" alt="">
+    <p id="photo-caption" aria-live="polite"></p>
+    <div class="photo-navigation">
+      <button id="previous-photo" type="button" aria-label="上一张照片">←</button>
+      <span id="photo-position"></span>
+      <button id="next-photo" type="button" aria-label="下一张照片">→</button>
+    </div>
+  </dialog>
   <noscript><p class="noscript">请启用 JavaScript，以显示恋爱计时和回忆内容。</p></noscript>
 </body>
 </html>

@@ -12,10 +12,8 @@ window.MEMORIES = {
       text: "蔡旆伦 ♡ 柏君祥",
     },
   ],
-  // 添加照片时，按以下格式填写，删除前面的双斜杠。
-  photos: [
-    // { src: "./images/our-photo.jpg", caption: "照片的故事", date: "2026-05-11" },
-  ],
+  // 相册清单在 photo-library.js 中维护，外层照片的 caption 保留原文件名配文。
+  photos: window.PHOTO_LIBRARY,
   // 添加心愿时填写 { text: "想一起做的事", done: false }，完成后改为 true。
   wishes: [],
 };
