@@ -133,6 +133,34 @@ h2 { font-family: var(--serif); font-size: 34px; font-weight: 400; letter-spacin
 .wish-row p { margin: 0; flex: 1; }
 .wish-row small { font-size: 11px; color: var(--muted); }
 .wish-row.done p { text-decoration: line-through; color: var(--muted); }
+.notes-layout { display: grid; grid-template-columns: minmax(240px, .8fr) minmax(0, 1.7fr); gap: 40px; align-items: start; }
+.note-form { display: flex; flex-direction: column; gap: 11px; }
+.note-form label { font-size: 13px; color: var(--muted); }
+.note-form textarea, .note-form input { width: 100%; padding: 14px; border: 1px solid var(--line); border-radius: 12px; background: #fffdf8; color: var(--ink); font: inherit; }
+.note-form textarea { resize: vertical; min-height: 170px; line-height: 1.9; }
+.note-form input { padding-block: 11px; }
+.note-form textarea:focus-visible, .note-form input:focus-visible { outline: 2px solid #bc8d86; outline-offset: 2px; }
+.note-form > button { display: flex; justify-content: space-between; margin-top: 9px; padding: 12px 18px; border: 0; border-radius: 10px; background: var(--ink); color: var(--paper); cursor: pointer; }
+.note-form > button span { color: #e7b7b4; font-size: 22px; line-height: 1.1; }
+.note-form > button:disabled { opacity: .6; cursor: wait; }
+.notes-refresh, .notes-more { padding: 8px 15px; border: 1px solid var(--line); border-radius: 8px; background: #fffdf8; color: var(--ink); cursor: pointer; font-size: 12px; }
+.notes-refresh:disabled, .notes-more:disabled { opacity: .6; cursor: wait; }
+.notes-status { min-height: 22px; margin: 0; font-size: 12px; color: var(--rose); }
+.notes-board > .notes-status:empty { min-height: 0; }
+.notes-board > .notes-status:not(:empty) { margin-bottom: 12px; }
+.notes-scroll { height: 560px; padding: 24px; overflow-y: auto; overscroll-behavior-y: contain; border: 1px solid var(--line); border-radius: 20px; background-color: #efeee7; background-image: radial-gradient(#b9b9a754 .8px, transparent .8px); background-size: 14px 14px; scrollbar-width: thin; scrollbar-color: #b8b4a3 #efeee7; }
+.notes-list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; align-items: start; }
+.sticky-note { position: relative; padding: 27px 20px 19px; border-radius: 3px 3px 17px 3px; background: #fff0b9; box-shadow: 2px 6px 10px #4a463014; transform: rotate(-1deg); }
+.sticky-note:nth-child(even) { transform: rotate(1deg); }
+.sticky-note::before { content: ""; position: absolute; top: -7px; left: calc(50% - 25px); width: 50px; height: 18px; background: #e1d5bc80; transform: rotate(-4deg); }
+.sticky-note[data-tone="1"] { background: #f7dfe1; }
+.sticky-note[data-tone="2"] { background: #e3edd5; }
+.sticky-note[data-tone="3"] { background: #e8e2f1; }
+.sticky-note p { margin-bottom: 20px; font-family: var(--serif); font-size: 17px; line-height: 1.9; white-space: pre-wrap; overflow-wrap: anywhere; }
+.sticky-note time { display: block; color: #787363; font-size: 10px; letter-spacing: .5px; }
+.notes-empty { grid-column: 1 / -1; padding: 90px 10px; margin: 0; color: var(--muted); text-align: center; font-family: var(--serif); font-size: 17px; }
+.notes-more { display: block; margin: 25px auto 0; }
+.notes-more[hidden] { display: none; }
 .closing { text-align: center; margin: 90px auto 70px; }
 .closing p { font-family: var(--serif); font-size: 27px; letter-spacing: 3px; margin-bottom: 13px; }
 .closing > span { color: var(--rose); font-size: 12px; letter-spacing: 3px; }
@@ -179,6 +207,7 @@ dialog p { text-align: center; margin: 15px 0 0; }
   .photo-placeholder { min-height: 225px; }
   .photo-placeholder p { font-size: 15px; }
   .wishes { gap: 40px; }
+  .notes-layout { grid-template-columns: 1fr; gap: 24px; }
   footer { width: calc(100% - 40px); }
 }
 @media (max-width: 580px) {
@@ -213,6 +242,8 @@ dialog p { text-align: center; margin: 15px 0 0; }
   .photo-placeholder:nth-child(2) { transform: rotate(-1deg); }
   .wishes { grid-template-columns: 1fr; gap: 25px; padding-block: 30px; }
   .hand-heart { display: none; }
+  .notes-scroll { padding: 22px; height: 480px; }
+  .notes-list { grid-template-columns: 1fr; }
   .wish-empty { padding: 28px; }
   .wish-empty > span { font-size: 21px; }
   .closing { margin: 60px 20px 45px; }

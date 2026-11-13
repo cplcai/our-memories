@@ -42,6 +42,12 @@
 
 「从相识到相恋」相册中的聊天记录也以原图发布，按文件顺序浏览。
 
+## 便签留言
+
+打开网页的“便签留言”区域即可写下文字，输入发布密码后保存。便签使用云端数据库共享保存，支持换行、表情符号和滚动翻看更早的留言。
+
+网页接口地址位于 `notes.js`。独立云服务的源码在本地 `.tools/notes-service`，运行时密码通过 Sites 的 `NOTES_PASSWORD` 密钥配置，数据库绑定为 `DB`。
+
 ## 部署
 
 仓库 Settings → Pages → Deploy from a branch → main → / (root) → Save。

@@ -6,17 +6,18 @@
   <meta name="theme-color" content="#f6f2ec">
   <meta name="description" content="蔡旆伦与柏君祥的回忆小站，收藏一起走过的日子。">
   <title>和柏的回忆</title>
-  <link rel="stylesheet" href="./style.css?v=mwf7d43g">
+  <link rel="stylesheet" href="./style.css?v=notes-1">
   <script src="./photo-library.js?v=mwf7d43g" defer></script>
   <script src="./config.js?v=mwf7d43g" defer></script>
   <script src="./app.js?v=mwf7d43g" defer></script>
+  <script src="./notes.js?v=notes-1" defer></script>
 </head>
 <body>
   <a class="skip" href="#main">跳到正文</a>
   <header class="header">
     <a class="brand" href="#home"><span class="brand-heart" aria-hidden="true">♡</span><span data-site-title>和柏的回忆</span></a>
     <nav aria-label="主导航">
-      <a href="#story">我们的故事</a><a href="#album">恋爱相册</a><a href="#wishes">共同心愿</a>
+      <a href="#story">我们的故事</a><a href="#album">恋爱相册</a><a href="#wishes">共同心愿</a><a href="#notes">便签留言</a>
     </nav>
   </header>
   <main id="main">
@@ -51,6 +52,26 @@
     <section class="section wishes" id="wishes" aria-labelledby="wishes-title">
       <div class="wish-intro"><p class="eyebrow">关于我们的以后</p><h2 id="wishes-title">想和你一起，<br>慢慢完成。</h2><p>把“有机会”，变成“我们去过”。</p><span class="hand-heart" aria-hidden="true">♡</span></div>
       <div class="wish-list" id="wish-list"></div>
+    </section>
+    <section class="section notes-section" id="notes" aria-labelledby="notes-title">
+      <div class="section-head"><div><p class="eyebrow">留给彼此的话</p><h2 id="notes-title">我们的便签<span class="heading-dot">.</span></h2></div><button class="notes-refresh" id="notes-refresh" type="button">刷新便签</button></div>
+      <div class="notes-layout">
+        <form class="note-form" id="note-form">
+          <label for="note-text">写张便签</label>
+          <textarea id="note-text" name="text" rows="7" placeholder="今天想对你说……" required></textarea>
+          <label for="note-password">发布密码</label>
+          <input id="note-password" name="password" type="password" autocomplete="current-password" placeholder="输入发布密码" required>
+          <button id="note-submit" type="submit">贴上便签 <span aria-hidden="true">♡</span></button>
+          <p class="notes-status" id="note-submit-status" role="status"></p>
+        </form>
+        <div class="notes-board">
+          <p class="notes-status" id="notes-read-status" role="status"></p>
+          <div class="notes-scroll" id="notes-scroll" tabindex="0" aria-label="便签留言，可上下滚动浏览">
+            <div class="notes-list" id="notes-list"></div>
+            <button class="notes-more" id="notes-more" type="button" hidden>往前翻翻</button>
+          </div>
+        </div>
+      </div>
     </section>
     <section class="closing"><p>日子很长，故事慢慢写。</p><span id="signature">蔡旆伦 & 柏君祥</span><a href="#home" aria-label="回到顶部">↑</a></section>
   </main>

@@ -20,7 +20,7 @@ const work = path.join(root, ".tools", "manager");
 const gh = fs.existsSync(path.join(root, ".tools", "github-cli", "bin", "gh.exe"))
   ? path.join(root, ".tools", "github-cli", "bin", "gh.exe") : "gh";
 const environment = { ...process.env, GH_CONFIG_DIR: path.join(root, ".tools", "gh-config"), GIT_TERMINAL_PROMPT: "0" };
-const sitePaths = ["config.js", "photo-library.js", "index.html", "app.js", "style.css", "images"];
+const sitePaths = ["config.js", "photo-library.js", "index.html", "app.js", "notes.js", "style.css", "images"];
 const tickets = new Map();
 const originalExtensions = { jpeg: ".jpg", png: ".png", webp: ".webp", gif: ".gif", avif: ".avif" };
 let mutationQueue = Promise.resolve();
@@ -111,7 +111,7 @@ function configText(settings) {
 
 function versionHtml(html) {
   const version = Date.now().toString(36);
-  return html.replace(/(src|href)="\.\/(app\.js|config\.js|photo-library\.js|style\.css)(?:\?[^"]*)?"/g,
+  return html.replace(/(src|href)="\.\/(app\.js|notes\.js|config\.js|photo-library\.js|style\.css)(?:\?[^"]*)?"/g,
     (_, attribute, filename) => `${attribute}="./${filename}?v=${version}"`);
 }
 
@@ -567,7 +567,7 @@ async function handle(request, response) {
   if (url.pathname.startsWith("/preview/")) {
     const name = decodeURIComponent(url.pathname.slice(9)) || "index.html";
     if (name.startsWith("images/")) return sendFile(response, imagePath("./" + name));
-    if (!["index.html", "style.css", "app.js", "config.js", "photo-library.js"].includes(name)) fail("文件不存在", 404);
+    if (!["index.html", "style.css", "app.js", "notes.js", "config.js", "photo-library.js"].includes(name)) fail("文件不存在", 404);
     return sendFile(response, path.join(root, name));
   }
   const staticFiles = { "/": "index.html", "/manager.js": "manager.js", "/manager.css": "manager.css" };
