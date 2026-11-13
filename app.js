@@ -49,7 +49,9 @@ for (const story of memories.stories) {
   const date = element("time", "story-date", formattedDate(story.date));
   date.dateTime = story.date;
   const body = element("div", "story-body");
-  body.append(element("h3", "", story.title), element("p", "", story.text));
+  const heading = element("h3", "", story.title);
+  if (story.status) heading.append(element("span", "story-status", story.status));
+  body.append(heading, element("p", "", story.text));
   article.append(date, body);
   timeline.append(article);
 }
@@ -59,70 +61,114 @@ timeline.append(nextStory);
 
 const photos = document.getElementById("photos");
 const dialog = document.getElementById("photo-dialog");
-const albumFilter = document.getElementById("album-filter");
-const loadMore = document.getElementById("load-more");
-const batchSize = 24;
-let filteredPhotos = memories.photos;
-let visiblePhotoCount = 0;
+const albumThumbnails = document.getElementById("album-thumbnails");
+const archivedAlbums = new Map();
+const individualPhotos = [];
+let activePhotos = [];
+let activeAlbum = "";
 let activePhotoIndex = 0;
 
 function showPhoto(index) {
-  activePhotoIndex = (index + filteredPhotos.length) % filteredPhotos.length;
-  const photo = filteredPhotos[activePhotoIndex];
+  activePhotoIndex = (index + activePhotos.length) % activePhotos.length;
+  const photo = activePhotos[activePhotoIndex];
+  const description = activeAlbum ? `${activeAlbum} · 第 ${activePhotoIndex + 1} 张照片` : photo.caption;
   const largePhoto = document.getElementById("large-photo");
   largePhoto.src = photo.src;
-  largePhoto.alt = photo.caption;
-  document.getElementById("photo-caption").textContent = [photo.album, photo.date && formattedDate(photo.date), photo.caption].filter(Boolean).join(" · ");
-  document.getElementById("photo-position").textContent = `${activePhotoIndex + 1} / ${filteredPhotos.length}`;
-  document.getElementById("previous-photo").disabled = filteredPhotos.length < 2;
-  document.getElementById("next-photo").disabled = filteredPhotos.length < 2;
-}
-
-function renderNextPhotos() {
-  const nextPhotoCount = Math.min(visiblePhotoCount + batchSize, filteredPhotos.length);
-  for (let index = visiblePhotoCount; index < nextPhotoCount; index += 1) {
-    const photo = filteredPhotos[index];
-    const button = element("button", "photo-card");
-    button.type = "button";
-    button.setAttribute("aria-label", `查看照片 ${photo.caption}`);
-    const image = element("img", "");
-    image.src = photo.thumbnail || photo.src;
-    image.alt = photo.caption;
-    image.loading = "lazy";
-    image.decoding = "async";
-    image.width = photo.width || 600;
-    image.height = photo.height || 600;
-    const caption = element("span", "photo-card-caption", photo.caption);
-    button.append(image, caption);
-    button.addEventListener("click", () => {
-      showPhoto(index);
-      dialog.showModal();
-    });
-    photos.append(button);
+  largePhoto.alt = description;
+  dialog.classList.toggle("full-resolution-view", Boolean(photo.fullResolution));
+  dialog.scrollTop = 0;
+  const originalPhoto = document.getElementById("original-photo");
+  originalPhoto.href = photo.src;
+  originalPhoto.hidden = !photo.fullResolution;
+  dialog.setAttribute("aria-label", description);
+  document.getElementById("photo-caption").textContent = activeAlbum ? "" : [photo.date && formattedDate(photo.date), photo.caption].filter(Boolean).join(" · ");
+  document.getElementById("photo-position").textContent = `${activePhotoIndex + 1} / ${activePhotos.length}`;
+  document.getElementById("previous-photo").disabled = activePhotos.length < 2;
+  document.getElementById("next-photo").disabled = activePhotos.length < 2;
+  for (const [thumbnailIndex, button] of Array.from(albumThumbnails.children).entries()) {
+    button.setAttribute("aria-current", String(thumbnailIndex === activePhotoIndex));
   }
-  visiblePhotoCount = nextPhotoCount;
-  document.getElementById("photo-count").textContent = `已展示 ${visiblePhotoCount} / ${filteredPhotos.length} 张`;
-  loadMore.hidden = visiblePhotoCount >= filteredPhotos.length;
+  if (activeAlbum && dialog.open) {
+    albumThumbnails.children[activePhotoIndex].scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
 }
 
-const albumCounts = new Map();
+function photoImage(photo, description) {
+  const image = element("img", "");
+  image.src = photo.thumbnail || photo.src;
+  image.alt = description;
+  image.loading = "lazy";
+  image.decoding = "async";
+  image.width = photo.width || 600;
+  image.height = photo.height || 600;
+  return image;
+}
+
+function openPhotos(collection, index, album = "") {
+  activePhotos = collection;
+  activeAlbum = album;
+  dialog.classList.toggle("album-view", Boolean(album));
+  const title = document.getElementById("photo-dialog-title");
+  title.textContent = album;
+  title.hidden = !album;
+  document.getElementById("photo-caption").hidden = Boolean(album);
+  albumThumbnails.hidden = !album;
+  albumThumbnails.replaceChildren();
+  if (album) {
+    collection.forEach((photo, photoIndex) => {
+      const button = element("button", "album-thumbnail");
+      button.type = "button";
+      button.setAttribute("aria-label", `查看第 ${photoIndex + 1} 张照片`);
+      button.append(photoImage(photo, `${album} · 第 ${photoIndex + 1} 张照片`));
+      button.addEventListener("click", () => showPhoto(photoIndex));
+      albumThumbnails.append(button);
+    });
+  }
+  dialog.showModal();
+  showPhoto(index);
+}
+
 for (const photo of memories.photos) {
-  const album = photo.album || "点滴回忆";
-  albumCounts.set(album, (albumCounts.get(album) || 0) + 1);
-}
-for (const [album, count] of albumCounts) {
-  const option = element("option", "", `${album}（${count} 张）`);
-  option.value = album;
-  albumFilter.append(option);
+  const inFolder = photo.source ? /[\\/]/.test(photo.source) : photo.album && photo.album !== "点滴回忆";
+  if (inFolder) {
+    const album = photo.album || photo.source.split(/[\\/]/).slice(0, -1).join(" / ");
+    if (!archivedAlbums.has(album)) archivedAlbums.set(album, []);
+    archivedAlbums.get(album).push(photo);
+  } else {
+    individualPhotos.push(photo);
+  }
 }
 
-albumFilter.addEventListener("change", () => {
-  filteredPhotos = memories.photos.filter(photo => !albumFilter.value || (photo.album || "点滴回忆") === albumFilter.value);
-  photos.replaceChildren();
-  visiblePhotoCount = 0;
-  renderNextPhotos();
+for (const [album, collection] of archivedAlbums) {
+  const albumTitle = album.replaceAll(" / ", " · ");
+  const button = element("button", "album-card");
+  button.type = "button";
+  button.setAttribute("aria-label", `打开相册 ${albumTitle}，共 ${collection.length} 张照片`);
+  button.setAttribute("aria-haspopup", "dialog");
+  button.setAttribute("aria-controls", "photo-dialog");
+  const stack = element("span", "photo-stack");
+  stack.setAttribute("aria-hidden", "true");
+  for (let layer = Math.min(2, collection.length - 1); layer >= 0; layer -= 1) {
+    const image = photoImage(collection[layer], "");
+    image.className = `stack-photo stack-layer-${layer}`;
+    stack.append(image);
+  }
+  button.append(stack, element("span", "album-card-title", albumTitle), element("span", "album-card-count", `${collection.length} 张照片`));
+  button.addEventListener("click", () => openPhotos(collection, 0, albumTitle));
+  photos.append(button);
+}
+
+individualPhotos.forEach((photo, index) => {
+  const button = element("button", "photo-card");
+  button.classList.toggle("full-resolution-card", Boolean(photo.fullResolution));
+  button.type = "button";
+  button.setAttribute("aria-label", `查看照片 ${photo.caption}`);
+  button.setAttribute("aria-haspopup", "dialog");
+  button.setAttribute("aria-controls", "photo-dialog");
+  button.append(photoImage(photo, photo.caption), element("span", "photo-card-caption", photo.caption));
+  button.addEventListener("click", () => openPhotos(individualPhotos, index));
+  photos.append(button);
 });
-loadMore.addEventListener("click", renderNextPhotos);
 document.getElementById("previous-photo").addEventListener("click", () => showPhoto(activePhotoIndex - 1));
 document.getElementById("next-photo").addEventListener("click", () => showPhoto(activePhotoIndex + 1));
 dialog.addEventListener("keydown", event => {
@@ -145,9 +191,7 @@ if (memories.photos.length === 0) {
     photos.append(placeholder);
   }
 } else {
-  document.getElementById("album-toolbar").hidden = false;
   document.getElementById("album-note").hidden = true;
-  renderNextPhotos();
 }
 document.querySelector(".close-dialog").addEventListener("click", () => dialog.close());
 dialog.addEventListener("click", event => {

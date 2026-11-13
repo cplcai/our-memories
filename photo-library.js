@@ -19,13 +19,14 @@ window.PHOTO_LIBRARY = [
     "source": "2026.7.26 小柏又来哈尔滨啦.jpg"
   },
   {
-    "src": "./images/albums/120c68451e9b0e30.webp",
-    "thumbnail": "./images/albums/120c68451e9b0e30-thumb.webp",
-    "width": 366,
-    "height": 2400,
+    "src": "./images/original-confession.jpg",
+    "thumbnail": "./images/original-confession.jpg",
+    "width": 1260,
+    "height": 8271,
     "caption": "表白啦",
     "album": "点滴回忆",
-    "source": "表白啦.jpg"
+    "source": "表白啦.jpg",
+    "fullResolution": true
   },
   {
     "src": "./images/albums/9166b8d193d381e1.webp",
